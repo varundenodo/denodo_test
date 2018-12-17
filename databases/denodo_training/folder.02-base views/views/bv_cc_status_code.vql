@@ -1,0 +1,29 @@
+﻿CREATE OR REPLACE WRAPPER ODBC bv_cc_status_code
+    FOLDER = '/02-base views'
+    DATASOURCENAME=ds_call_center
+    SCHEMANAME='calltracking.mdb' 
+    RELATIONNAME='status_code' 
+    OUTPUTSCHEMA (
+    code_id = 'code_id' :'java.lang.Integer' (OPT) (sourcetyperadix='10', sourcetypename='COUNTER', sourcetypeid='4', sourcetypedecimals='0', sourcetypesize='10')  NOT NULL NOT SORTABLE,
+    code_description = 'code_description' :'java.lang.String' (OPT) (sourcetypename='VARCHAR', sourcetypeid='12', sourcetypesize='250')  SORTABLE
+    );
+
+CREATE OR REPLACE TABLE bv_cc_status_code I18N au_cst (
+        code_id:int (sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', sourcetypeid = '4'), 
+        code_description:text (sourcetypesize = '250', sourcetypeid = '12')
+    )
+    FOLDER = '/02-base views'
+    PRIMARY KEY ( 'code_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_cc_status_code(
+        I18N au_cst
+        CONSTRAINTS (
+             ADD code_id (any) OPT ANY
+             ADD code_description (any) OPT ANY
+        )
+        OUTPUTLIST (code_description, code_id
+        )
+        WRAPPER (odbc bv_cc_status_code)
+    );
+

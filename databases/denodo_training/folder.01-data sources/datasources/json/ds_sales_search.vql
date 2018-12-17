@@ -1,0 +1,19 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE DATASOURCE JSON ds_sales_search
+    FOLDER = '/01-data sources'
+    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' POST '${databases.denodo_training.folder.01-data sources.datasources.json.ds_sales_search.ROUTE.HTTP.URL}'
+    POSTBODY '\{{
+^ExecuteIfIsNotNull("\"customerId\" : \"",@CID,"\",","\"customerId\" : null,")
+^ExecuteIfIsNotNull("\"employeeId\" : \"",@EID,"\",","\"employeeId\" : null,")
+^ExecuteIfIsNotNull("\"productId\" : \"",@PID,"\"","\"productId\" : null")
+\}}'
+    MIME 'application/json'
+    HEADERS (
+        'Accept'='application/json', 
+        'Content-type'='application/json'
+    )
+    AUTHENTICATION BASIC ( 
+      USER '${databases.denodo_training.folder.01-data sources.datasources.json.ds_sales_search.ROUTE.HTTP.USER}'
+      PASSWORD '${databases.denodo_training.folder.01-data sources.datasources.json.ds_sales_search.ROUTE.HTTP.PASSWORD}' ${databases.denodo_training.folder.01-data sources.datasources.json.ds_sales_search.ROUTE.HTTP.PASSWORD.ENCRYPTED} )
+    PROXY OFF;
+

@@ -1,0 +1,31 @@
+﻿CREATE OR REPLACE WRAPPER JDBC bv_ho_order_item
+    FOLDER = '/02-base views'
+    DATASOURCENAME=ds_historical_orders
+    RELATIONNAME='order_item' 
+    OUTPUTSCHEMA (
+        id = 'id' :'java.lang.Integer' (OPT) (sourcetyperadix='10', sourcetypename='INT', sourcetypeid='4', sourcetypedecimals='0', sourcetypesize='10')  SORTABLE,
+        order_id = 'order_id' :'java.lang.Integer' (OPT) (sourcetyperadix='10', sourcetypename='INT', sourcetypeid='4', sourcetypedecimals='0', sourcetypesize='10')  SORTABLE,
+        product_id = 'product_id' :'java.lang.Integer' (OPT) (sourcetyperadix='10', sourcetypename='INT', sourcetypeid='4', sourcetypedecimals='0', sourcetypesize='10')  SORTABLE
+    );
+
+CREATE OR REPLACE TABLE bv_ho_order_item I18N us_pst (
+        id:int (sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', sourcetypeid = '4'), 
+        order_id:int (sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', sourcetypeid = '4'), 
+        product_id:int (sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', sourcetypeid = '4')
+    )
+    FOLDER = '/02-base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_ho_order_item(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD id (any) OPT ANY
+             ADD order_id (any) OPT ANY
+             ADD product_id (any) OPT ANY
+        )
+        OUTPUTLIST (id, order_id, product_id
+        )
+        WRAPPER (jdbc bv_ho_order_item)
+    )
+    SMART_THEN_ATSOURCE_THROUGH_VDP;
+

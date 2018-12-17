@@ -1,0 +1,28 @@
+﻿CREATE OR REPLACE WRAPPER ODBC bv_cc_problem
+    FOLDER = '/02-base views'
+    DATASOURCENAME=ds_call_center
+    SCHEMANAME='calltracking.mdb' 
+    RELATIONNAME='problem' 
+    OUTPUTSCHEMA (
+    problem_code = 'problem_code' :'java.lang.Integer' (OPT) (sourcetyperadix='10', sourcetypename='COUNTER', sourcetypeid='4', sourcetypedecimals='0', sourcetypesize='10')  NOT NULL NOT SORTABLE,
+    problem_description = 'problem_description' :'java.lang.String' (OPT) (sourcetypename='VARCHAR', sourcetypeid='12', sourcetypesize='250')  SORTABLE
+    );
+
+CREATE OR REPLACE TABLE bv_cc_problem I18N au_cst (
+        problem_code:int (sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', sourcetypeid = '4'), 
+        problem_description:text (sourcetypesize = '250', sourcetypeid = '12')
+    )
+    FOLDER = '/02-base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_cc_problem(
+        I18N au_cst
+        CONSTRAINTS (
+             ADD problem_code (any) OPT ANY
+             ADD problem_description (any) OPT ANY
+        )
+        OUTPUTLIST (problem_code, problem_description
+        )
+        WRAPPER (odbc bv_cc_problem)
+    );
+

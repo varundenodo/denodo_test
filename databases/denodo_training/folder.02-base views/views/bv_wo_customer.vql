@@ -1,0 +1,57 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC customer
+    FOLDER = '/02-base views'
+    DATASOURCENAME=ds_web_orders
+    SCHEMANAME = '${databases.denodo_training.folder.02-base views.views.jdbc.customer.SCHEMANAME}'
+    RELATIONNAME='CUSTOMER' 
+    OUTPUTSCHEMA (
+        id = 'ID' :'java.math.BigDecimal' (OPT) (sourcetyperadix='10', sourcetypename='NUMBER', sourcetypeid='3')  NOT NULL SORTABLE,
+        customer_code_internal = 'CUSTOMER_CODE_INTERNAL' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypename='VARCHAR2', sourcetypeid='12', sourcetypesize='20')  NOT NULL SORTABLE,
+        first_name = 'FIRST_NAME' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypename='VARCHAR2', sourcetypeid='12', sourcetypesize='50')  NOT NULL SORTABLE,
+        last_name = 'LAST_NAME' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypename='VARCHAR2', sourcetypeid='12', sourcetypesize='100')  SORTABLE,
+        email = 'EMAIL' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypename='VARCHAR2', sourcetypeid='12', sourcetypesize='50')  NOT NULL SORTABLE,
+        phone = 'PHONE' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypename='VARCHAR2', sourcetypeid='12', sourcetypesize='20')  SORTABLE,
+        main_address = 'MAIN_ADDRESS' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypename='VARCHAR2', sourcetypeid='12', sourcetypesize='200')  SORTABLE,
+        main_postcode = 'MAIN_POSTCODE' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypename='VARCHAR2', sourcetypeid='12', sourcetypesize='20')  SORTABLE,
+        main_country = 'MAIN_COUNTRY' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypename='VARCHAR2', sourcetypeid='12', sourcetypesize='100')  SORTABLE,
+        registered_date = 'REGISTERED_DATE' :'java.sql.Timestamp' (OPT) (sourcetyperadix='10', sourcetypename='TIMESTAMP(6)', sourcetypeid='93', sourcetypedecimals='6', sourcetypesize='11')  NOT NULL SORTABLE
+    )
+    CONSTRAINT 'CUSTOMER_PK' PRIMARY KEY ( 'ID' , 'CUSTOMER_CODE_INTERNAL' )
+    INDEX 'CUSTOMER_PK' CLUSTER UNIQUE PRIMARY ( 'ID' , 'CUSTOMER_CODE_INTERNAL' );
+
+CREATE OR REPLACE TABLE bv_wo_customer I18N au_cst (
+        id:decimal (sourcetyperadix = '10', sourcetypeid = '3'), 
+        customer_code_internal:text (sourcetyperadix = '10', sourcetypesize = '20', sourcetypeid = '12'), 
+        first_name:text (sourcetyperadix = '10', sourcetypesize = '50', sourcetypeid = '12'), 
+        last_name:text (sourcetyperadix = '10', sourcetypesize = '100', sourcetypeid = '12'), 
+        email:text (sourcetyperadix = '10', sourcetypesize = '50', sourcetypeid = '12'), 
+        phone:text (sourcetyperadix = '10', sourcetypesize = '20', sourcetypeid = '12'), 
+        main_address:text (sourcetyperadix = '10', sourcetypesize = '200', sourcetypeid = '12'), 
+        main_postcode:text (sourcetyperadix = '10', sourcetypesize = '20', sourcetypeid = '12'), 
+        main_country:text (sourcetyperadix = '10', sourcetypesize = '100', sourcetypeid = '12'), 
+        registered_date:timestamp (sourcetyperadix = '10', sourcetypedecimals = '6', sourcetypesize = '11', sourcetypeid = '93')
+    )
+    FOLDER = '/02-base views'
+    CONSTRAINT 'CUSTOMER_PK' PRIMARY KEY ( 'id' , 'customer_code_internal' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD customer(
+        I18N au_cst
+        CONSTRAINTS (
+             ADD id (any) OPT ANY
+             ADD customer_code_internal (any) OPT ANY
+             ADD first_name (any) OPT ANY
+             ADD last_name (any) OPT ANY
+             ADD email (any) OPT ANY
+             ADD phone (any) OPT ANY
+             ADD main_address (any) OPT ANY
+             ADD main_postcode (any) OPT ANY
+             ADD main_country (any) OPT ANY
+             ADD registered_date (any) OPT ANY
+        )
+        OUTPUTLIST (customer_code_internal, email, first_name, id, last_name, main_address, main_country, main_postcode, phone, registered_date
+        )
+        WRAPPER (jdbc customer)
+    )
+    SMART_ONLY;
+

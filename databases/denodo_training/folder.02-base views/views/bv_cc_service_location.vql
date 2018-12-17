@@ -1,0 +1,40 @@
+﻿CREATE OR REPLACE WRAPPER ODBC bv_cc_service_location
+    FOLDER = '/02-base views'
+    DATASOURCENAME=ds_call_center
+    SCHEMANAME='calltracking.mdb' 
+    RELATIONNAME='service_location' 
+    OUTPUTSCHEMA (
+    id = 'id' :'java.lang.Integer' (OPT) (sourcetyperadix='10', sourcetypename='COUNTER', sourcetypeid='4', sourcetypedecimals='0', sourcetypesize='10')  NOT NULL NOT SORTABLE,
+    location_id = 'location_id' :'java.lang.Long' (OPT) (sourcetyperadix='10', sourcetypename='DECIMAL', sourcetypeid='2', sourcetypedecimals='0', sourcetypesize='18')  SORTABLE,
+    customer_id = 'customer_id' :'java.lang.Long' (OPT) (sourcetyperadix='10', sourcetypename='DECIMAL', sourcetypeid='2', sourcetypedecimals='0', sourcetypesize='18')  SORTABLE,
+    business_name = 'business_name' :'java.lang.String' (OPT) (sourcetypename='VARCHAR', sourcetypeid='12', sourcetypesize='50')  SORTABLE,
+    service_location = 'service_location' :'java.lang.String' (OPT) (sourcetypename='VARCHAR', sourcetypeid='12', sourcetypesize='50')  SORTABLE,
+    other_details = 'other_details' :'java.lang.String' (OPT) (sourcetypename='VARCHAR', sourcetypeid='12', sourcetypesize='250')  SORTABLE
+    );
+
+CREATE OR REPLACE TABLE bv_cc_service_location I18N au_cst (
+        id:int (sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', sourcetypeid = '4'), 
+        location_id:long (sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '18', sourcetypeid = '-5'), 
+        customer_id:long (sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '18', sourcetypeid = '-5'), 
+        business_name:text (sourcetypesize = '50', sourcetypeid = '12'), 
+        service_location:text (sourcetypesize = '50', sourcetypeid = '12'), 
+        other_details:text (sourcetypesize = '250', sourcetypeid = '12')
+    )
+    FOLDER = '/02-base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_cc_service_location(
+        I18N au_cst
+        CONSTRAINTS (
+             ADD id (any) OPT ANY
+             ADD location_id (any) OPT ANY
+             ADD customer_id (any) OPT ANY
+             ADD business_name (any) OPT ANY
+             ADD service_location (any) OPT ANY
+             ADD other_details (any) OPT ANY
+        )
+        OUTPUTLIST (business_name, customer_id, id, location_id, other_details, service_location
+        )
+        WRAPPER (odbc bv_cc_service_location)
+    );
+

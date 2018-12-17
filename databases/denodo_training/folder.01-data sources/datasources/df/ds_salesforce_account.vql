@@ -1,0 +1,8 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE DATASOURCE DF ds_salesforce_account
+    FOLDER = '/01-data sources'
+    ROUTE LOCAL 'LocalConnection' '${databases.denodo_training.folder.01-data sources.datasources.df.ds_salesforce_account.ROUTE.LOCAL.PATH}'
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+

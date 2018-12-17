@@ -1,0 +1,33 @@
+﻿CREATE OR REPLACE WRAPPER LDAP bv_group
+    FOLDER = '/02-base views'
+    DATASOURCENAME=ds_active_ldap
+    OBJECTCLASSES='top'
+    LDAPEXPRESSION='(&(objectClass=group))'   
+    RECURSIVESEARCH=TRUE
+    SINGLE-VALUE=FALSE
+    OUTPUTSCHEMA (
+        cn = 'cn' : 'java.lang.String',
+        distinguishedname = 'distinguishedName' : 'java.lang.String',
+        objectcategory = 'objectCategory' : 'java.lang.String'
+    );
+
+CREATE OR REPLACE TABLE bv_group I18N au_cst (
+        cn:text, 
+        distinguishedname:text, 
+        objectcategory:text
+    )
+    FOLDER = '/02-base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_group(
+        I18N au_cst
+        CONSTRAINTS (
+             ADD cn NOS ZERO ()
+             ADD distinguishedname NOS ZERO ()
+             ADD objectcategory NOS ZERO ()
+        )
+        OUTPUTLIST (cn, distinguishedname, objectcategory
+        )
+        WRAPPER (ldap bv_group)
+    );
+

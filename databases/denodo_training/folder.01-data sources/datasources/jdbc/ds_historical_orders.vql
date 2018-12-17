@@ -1,0 +1,32 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE DATASOURCE JDBC ds_historical_orders
+    FOLDER = '/01-data sources'
+    DRIVERCLASSNAME = 'com.cloudera.impala.jdbc41.Driver'
+    DATABASEURI = '${databases.denodo_training.folder.01-data sources.datasources.jdbc.ds_historical_orders.DATABASEURI}'
+    USERNAME = '${databases.denodo_training.folder.01-data sources.datasources.jdbc.ds_historical_orders.USERNAME}'
+    USERPASSWORD = '${databases.denodo_training.folder.01-data sources.datasources.jdbc.ds_historical_orders.USERPASSWORD}' ${databases.denodo_training.folder.01-data sources.datasources.jdbc.ds_historical_orders.USERPASSWORD.ENCRYPTED}
+    CLASSPATH = 'C:\Denodo\Denodo Platform\lib\extensions\jdbc-drivers\impala-2.1'
+    DATABASENAME = 'impala'
+    DATABASEVERSION = '2_3'
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = 'select 1'
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXSLEEPINGPS = 4
+    INITIALCAPACITYPS = 8
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    )
+    PROCESSING_UNITS = 8
+    CPUS_PER_PROCESSING_UNIT = 8;
+

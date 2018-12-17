@@ -1,0 +1,91 @@
+﻿CREATE OR REPLACE WRAPPER WS bv_product
+    FOLDER = '/02-base views'
+    DATASOURCENAME=ds_product
+    SERVICENAME='products-ws'
+    PORTNAME='ProductImplPort'
+    OPERATIONNAME='getAllProductDetails'
+    INPUTMESSAGE='getAllProductDetails'
+    OUTPUTMESSAGE='getAllProductDetailsResponse'
+    TUPLEROOT='/Envelope/Body/getAllProductDetailsResponse/product/productDetails/productDetail'
+    OUTPUTSCHEMA (
+    parameters = '$$0': REGISTER OF (
+    ),
+    code='Envelope.Body.getAllProductDetailsResponse.product.code',
+    description='Envelope.Body.getAllProductDetailsResponse.product.description',
+    warnings='Envelope.Body.getAllProductDetailsResponse.product.warnings',
+    numresults='Envelope.Body.getAllProductDetailsResponse.product.numResults',
+    productid='Envelope.Body.getAllProductDetailsResponse.product.productDetails.productDetail.productId',
+    productname='Envelope.Body.getAllProductDetailsResponse.product.productDetails.productDetail.productName',
+    productprice='Envelope.Body.getAllProductDetailsResponse.product.productDetails.productDetail.productPrice',
+    category = 'Envelope.Body.getAllProductDetailsResponse.product.productDetails.productDetail.category': REGISTER OF (
+        categoryid='categoryId',
+        categoryname='categoryName'
+    ),
+    characteristics = 'Envelope.Body.getAllProductDetailsResponse.product.productDetails.productDetail.characteristics': REGISTER OF (
+        characteristic_dimensions='characteristic_dimensions',
+        characteristic_weight='characteristic_weight',
+        characteristic_details='characteristic_details',
+        characteristic_color='characteristic_color'
+    ),
+    accessories = 'Envelope.Body.getAllProductDetailsResponse.product.productDetails.productDetail.accessories': ARRAY OF (
+        productdata = 'accessories': REGISTER OF (
+            productid='productId',
+            productname='productName',
+            productprice='productPrice'
+        )
+    )
+    );
+
+CREATE OR REPLACE TYPE getallproductdetails_category AS REGISTER OF (categoryid:int, categoryname:text);
+
+CREATE OR REPLACE TYPE getallproductdetails_characteristics AS REGISTER OF (characteristic_dimensions:text, characteristic_weight:text, characteristic_details:text, characteristic_color:text);
+
+CREATE OR REPLACE TYPE getallproductdetails_accessories_productdata AS REGISTER OF (productid:int, productname:text, productprice:float);
+
+CREATE OR REPLACE TYPE getallproductdetails_accessories AS ARRAY OF getallproductdetails_accessories_productdata;
+
+CREATE OR REPLACE TABLE bv_product I18N au_cst (
+        code:text, 
+        description:text, 
+        warnings:text, 
+        numresults:text, 
+        productid:int, 
+        productname:text, 
+        productprice:float, 
+        category:getallproductdetails_category, 
+        characteristics:getallproductdetails_characteristics, 
+        accessories:getallproductdetails_accessories
+    )
+    FOLDER = '/02-base views'
+    PRIMARY KEY ( 'productid' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_product(
+        I18N au_cst
+        CONSTRAINTS (
+             ADD code NOS ZERO ()
+             ADD description NOS ZERO ()
+             ADD warnings NOS ZERO ()
+             ADD numresults NOS ZERO ()
+             ADD productid NOS ZERO ()
+             ADD productname NOS ZERO ()
+             ADD productprice NOS ZERO ()
+             ADD category NOS ZERO ()
+             ADD category.categoryid NOS ZERO ()
+             ADD category.categoryname NOS ZERO ()
+             ADD characteristics NOS ZERO ()
+             ADD characteristics.characteristic_dimensions NOS ZERO ()
+             ADD characteristics.characteristic_weight NOS ZERO ()
+             ADD characteristics.characteristic_details NOS ZERO ()
+             ADD characteristics.characteristic_color NOS ZERO ()
+             ADD accessories NOS ZERO ()
+             ADD accessories NOS ZERO ()
+             ADD accessories.productid NOS ZERO ()
+             ADD accessories.productname NOS ZERO ()
+             ADD accessories.productprice NOS ZERO ()
+        )
+        OUTPUTLIST (accessories, category, characteristics, code, description, numresults, productid, productname, productprice, warnings
+        )
+        WRAPPER (ws bv_product)
+    );
+

@@ -1,0 +1,40 @@
+﻿CREATE OR REPLACE WRAPPER JDBC bv_ho_orders
+    FOLDER = '/02-base views'
+    DATASOURCENAME=ds_historical_orders
+    RELATIONNAME='orders' 
+    OUTPUTSCHEMA (
+        id = 'id' :'java.lang.Integer' (OPT) (sourcetyperadix='10', sourcetypename='INT', sourcetypeid='4', sourcetypedecimals='0', sourcetypesize='10')  SORTABLE,
+        customer_code = 'customer_code' :'java.lang.String' (OPT) (sourcetyperadix='0', sourcetypename='STRING', sourcetypeid='12', sourcetypedecimals='0', sourcetypesize='32767')  SORTABLE,
+        status = 'status' :'java.lang.String' (OPT) (sourcetyperadix='0', sourcetypename='STRING', sourcetypeid='12', sourcetypedecimals='0', sourcetypesize='32767')  SORTABLE,
+        dateplaced = 'dateplaced' :'java.sql.Timestamp' (OPT) (sourcetyperadix='0', sourcetypename='TIMESTAMP', sourcetypeid='93', sourcetypedecimals='9', sourcetypesize='29')  SORTABLE,
+        datedelivered = 'datedelivered' :'java.sql.Timestamp' (OPT) (sourcetyperadix='0', sourcetypename='TIMESTAMP', sourcetypeid='93', sourcetypedecimals='9', sourcetypesize='29')  SORTABLE,
+        dateclosed = 'dateclosed' :'java.sql.Timestamp' (OPT) (sourcetyperadix='0', sourcetypename='TIMESTAMP', sourcetypeid='93', sourcetypedecimals='9', sourcetypesize='29')  SORTABLE
+    );
+
+CREATE OR REPLACE TABLE bv_ho_orders I18N us_pst (
+        id:int (sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', sourcetypeid = '4'), 
+        customer_code:text (sourcetyperadix = '0', sourcetypedecimals = '0', sourcetypesize = '32767', sourcetypeid = '12'), 
+        status:text (sourcetyperadix = '0', sourcetypedecimals = '0', sourcetypesize = '32767', sourcetypeid = '12'), 
+        dateplaced:timestamp (sourcetyperadix = '0', sourcetypedecimals = '9', sourcetypesize = '29', sourcetypeid = '93'), 
+        datedelivered:timestamp (sourcetyperadix = '0', sourcetypedecimals = '9', sourcetypesize = '29', sourcetypeid = '93'), 
+        dateclosed:timestamp (sourcetyperadix = '0', sourcetypedecimals = '9', sourcetypesize = '29', sourcetypeid = '93')
+    )
+    FOLDER = '/02-base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_ho_orders(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD id (any) OPT ANY
+             ADD customer_code (any) OPT ANY
+             ADD status (any) OPT ANY
+             ADD dateplaced (any) OPT ANY
+             ADD datedelivered (any) OPT ANY
+             ADD dateclosed (any) OPT ANY
+        )
+        OUTPUTLIST (customer_code, dateclosed, datedelivered, dateplaced, id, status
+        )
+        WRAPPER (jdbc bv_ho_orders)
+    )
+    SMART_THEN_ATSOURCE_THROUGH_VDP;
+
