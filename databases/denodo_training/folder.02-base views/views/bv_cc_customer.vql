@@ -1,0 +1,43 @@
+﻿CREATE OR REPLACE WRAPPER ODBC bv_cc_customer
+    FOLDER = '/02-base views'
+    DATASOURCENAME=ds_call_center
+    SCHEMANAME='calltracking.mdb' 
+    RELATIONNAME='customer' 
+    OUTPUTSCHEMA (
+    customer_id = 'customer_id' :'java.lang.Integer' (OPT) (sourcetyperadix='10', sourcetypename='COUNTER', sourcetypeid='4', sourcetypedecimals='0', sourcetypesize='10')  NOT NULL NOT SORTABLE,
+    customer_name = 'customer_name' :'java.lang.String' (OPT) (sourcetypename='VARCHAR', sourcetypeid='12', sourcetypesize='150')  SORTABLE,
+    customer_address = 'customer_address' :'java.lang.String' (OPT) (sourcetypename='VARCHAR', sourcetypeid='12', sourcetypesize='250')  SORTABLE,
+    phone_number = 'phone_number' :'java.lang.String' (OPT) (sourcetypename='VARCHAR', sourcetypeid='12', sourcetypesize='20')  SORTABLE,
+    customer_code = 'customer_code' :'java.lang.String' (OPT) (sourcetypename='VARCHAR', sourcetypeid='12', sourcetypesize='20')  SORTABLE,
+    job_title = 'job_title' :'java.lang.String' (OPT) (sourcetypename='VARCHAR', sourcetypeid='12', sourcetypesize='50')  SORTABLE,
+    other_details = 'other_details' :'java.lang.String' (OPT) (sourcetypename='VARCHAR', sourcetypeid='12', sourcetypesize='250')  SORTABLE
+    );
+
+CREATE OR REPLACE TABLE bv_cc_customer I18N au_cst (
+        customer_id:int (sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', sourcetypeid = '4'), 
+        customer_name:text (sourcetypesize = '150', sourcetypeid = '12'), 
+        customer_address:text (sourcetypesize = '250', sourcetypeid = '12'), 
+        phone_number:text (sourcetypesize = '20', sourcetypeid = '12'), 
+        customer_code:text (sourcetypesize = '20', sourcetypeid = '12'), 
+        job_title:text (sourcetypesize = '50', sourcetypeid = '12'), 
+        other_details:text (sourcetypesize = '250', sourcetypeid = '12')
+    )
+    FOLDER = '/02-base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_cc_customer(
+        I18N au_cst
+        CONSTRAINTS (
+             ADD customer_id (any) OPT ANY
+             ADD customer_name (any) OPT ANY
+             ADD customer_address (any) OPT ANY
+             ADD phone_number (any) OPT ANY
+             ADD customer_code (any) OPT ANY
+             ADD job_title (any) OPT ANY
+             ADD other_details (any) OPT ANY
+        )
+        OUTPUTLIST (customer_address, customer_code, customer_id, customer_name, job_title, other_details, phone_number
+        )
+        WRAPPER (odbc bv_cc_customer)
+    );
+
