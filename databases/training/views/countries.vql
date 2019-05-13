@@ -1,0 +1,35 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC countries
+    DATASOURCENAME=ds_oracle
+    SCHEMANAME='${databases.training.views.jdbc.countries.SCHEMANAME}' 
+    RELATIONNAME='COUNTRIES' 
+    OUTPUTSCHEMA (
+        country_id = 'COUNTRY_ID' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='2', sourcetypeid='1', sourcetypename='CHAR')  NOT NULL SORTABLE,
+        country_name = 'COUNTRY_NAME' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='40', sourcetypeid='12', sourcetypename='VARCHAR2')  SORTABLE,
+        region_id = 'REGION_ID' :'java.math.BigDecimal' (OPT) (sourcetyperadix='10', sourcetypeid='3', sourcetypename='NUMBER')  SORTABLE
+    )
+    CONSTRAINT 'COUNTRY_C_ID_PK' PRIMARY KEY ( 'COUNTRY_ID' )
+    CONSTRAINT 'COUNTR_REG_FK' FOREIGN KEY ( 'REGION_ID' ) 
+    REFERENCES 'HR'.'REGIONS'( 'REGION_ID' )  ON DELETE RESTRICT NOT DEFERRABLE 
+    INDEX 'COUNTRY_C_ID_PK' CLUSTER UNIQUE PRIMARY ( 'COUNTRY_ID' );
+
+CREATE OR REPLACE TABLE countries I18N au_cst (
+        country_id:text (sourcetyperadix = '10', sourcetypesize = '2', sourcetypeid = '1'), 
+        country_name:text (sourcetyperadix = '10', sourcetypesize = '40', sourcetypeid = '12'), 
+        region_id:decimal (sourcetyperadix = '10', sourcetypeid = '3')
+    )
+    CONSTRAINT 'COUNTRY_C_ID_PK' PRIMARY KEY ( 'country_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD countries(
+        I18N au_cst
+        CONSTRAINTS (
+             ADD country_id (any) OPT ANY
+             ADD country_name (any) OPT ANY
+             ADD region_id (any) OPT ANY
+        )
+        OUTPUTLIST (country_id, country_name, region_id
+        )
+        WRAPPER (jdbc countries)
+    );
+
