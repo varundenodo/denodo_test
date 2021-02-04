@@ -1,0 +1,5 @@
+﻿CREATE OR REPLACE DATABASE test_vcs_status '';
+
+ALTER DATABASE test_vcs_status
+  CHARSET DEFAULT;
+

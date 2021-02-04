@@ -1,0 +1,33 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE DATASOURCE JDBC ds_oracke_copy
+    DRIVERCLASSNAME = 'oracle.jdbc.OracleDriver'
+    DATABASEURI = '${databases.test_vcs_status.datasources.jdbc.ds_oracke_copy.DATABASEURI}'
+    USERNAME = '${databases.test_vcs_status.datasources.jdbc.ds_oracke_copy.USERNAME}'
+    USERPASSWORD = '${databases.test_vcs_status.datasources.jdbc.ds_oracke_copy.USERPASSWORD}' ${databases.test_vcs_status.datasources.jdbc.ds_oracke_copy.USERPASSWORD.ENCRYPTED}
+    CLASSPATH = 'oracle-11g'
+    DATABASENAME = 'oracle'
+    DATABASEVERSION = '11g'
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = 'SELECT COUNT(*) FROM SYS.DUAL'
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXSLEEPINGPS = 4
+    INITIALCAPACITYPS = 8
+    PROPERTIES ('includeSynonyms'='false', 'remarksReporting'='false')
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    )
+    SOURCECONFIGURATION (
+        delegatescalarfunctionslist = (abs, acos, addday, addhour, addminute, addmonth, addsecond, addweek, addyear, ascii, asin, atan, atan2, case, cast, ceil, char, coalesce, concat, cos, cot, current_date, degrees, div, exp, firstdayofmonth, firstdayofweek, floor, formatdate, getday, getdayofweek, getdayofyear, getdaysbetween, gethour, getmicrosecond, getmillisecond, getminute, getmonth, getmonthsbetween, getnanosecond, getquarter, getsecond, gettimeinmillis, getweek, getyear, instr, lastdayofmonth, lastdayofweek, len, ln, log, lower, ltrim, max, min, mod, mult, nextweekday, now, nullif, pi, position, pow, power, previousweekday, radians, regexp, removeaccents, repeat, replace, round, rownum, rtrim, sign, sin, sql_trim, sqrt, substr, substring, subtract, sum, tan, textcat, textconstant, to_date, to_interval_day_second, to_interval_year_month, to_localdate, to_timestamp, to_timestamptz, trim, trunc, upper, xmlquery, xpath)
+    );
+

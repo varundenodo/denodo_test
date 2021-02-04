@@ -1,0 +1,31 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE DATASOURCE JDBC ds_oracle
+    FOLDER = '/new folder'
+    DRIVERCLASSNAME = 'oracle.jdbc.OracleDriver'
+    DATABASEURI = '${databases.test_vcs_status.folder.new folder.datasources.jdbc.ds_oracle.DATABASEURI}'
+    USERNAME = '${databases.test_vcs_status.folder.new folder.datasources.jdbc.ds_oracle.USERNAME}'
+    USERPASSWORD = '${databases.test_vcs_status.folder.new folder.datasources.jdbc.ds_oracle.USERPASSWORD}' ${databases.test_vcs_status.folder.new folder.datasources.jdbc.ds_oracle.USERPASSWORD.ENCRYPTED}
+    CLASSPATH = 'oracle-11g'
+    DATABASENAME = 'oracle'
+    DATABASEVERSION = '11g'
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = 'SELECT COUNT(*) FROM SYS.DUAL'
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXSLEEPINGPS = 4
+    INITIALCAPACITYPS = 8
+    PROPERTIES ('includeSynonyms'='false', 'remarksReporting'='false')
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
+
